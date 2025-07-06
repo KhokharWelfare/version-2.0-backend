@@ -6,9 +6,12 @@ const upload = require("../middleware/uploadMiddleware");
 
 router.use(authMiddleware.protect);
 
+const cloudinaryUpload = require("../middleware/cloudinaryUpload");
+
 router.post(
   "/",
   upload.single("proof"),
+  cloudinaryUpload,
   donationController.createDonation
 );
 
