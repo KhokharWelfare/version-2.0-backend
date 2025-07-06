@@ -17,34 +17,58 @@ const allowedOrigins = [
   "https://www.khokharwelfarefoundaion.com"
 ];
 // Use official CORS middleware for robust handling
+// const corsOptions = {
+//   origin: function(origin, callback) {
+//     // Allow requests with no origin (like mobile apps, curl, etc.)
+//     if (!origin) return callback(null, true);
+//     if (allowedOrigins.includes(origin)) {
+//       return callback(null, true);
+//     } else {
+//       // Instead of throwing, just deny with false (no CORS headers)
+//       return callback(null, false);
+//     }
+//   },
+//   credentials: true,
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Set-Cookie"]
+// };
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//     res.header("Access-Control-Allow-Origin", origin);
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie");
+//   }
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
+//   next();
+// });
+
+
+
+// Configure CORS middleware
 const corsOptions = {
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
     } else {
-      // Instead of throwing, just deny with false (no CORS headers)
-      return callback(null, false);
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Set-Cookie"]
 };
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie");
-  }
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+
+// Use CORS middleware globally
+app.use(cors(corsOptions));
+
+// Optional: Add fallback OPTIONS route handler
+app.options("*", cors(corsOptions)); // Reflect same settings for all preflight requests
+
+
 
 // app.use((req, res, next) => {
 //   const origin = req.headers.origin;
