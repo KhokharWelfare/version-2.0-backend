@@ -24,7 +24,8 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
-      return callback(new Error('Not allowed by CORS'));
+      // Instead of throwing, just deny with false (no CORS headers)
+      return callback(null, false);
     }
   },
   credentials: true,
@@ -56,9 +57,14 @@ connectDB();
 //   console.log("BODY:", req.body);
 //   res.send(req.body);
 // });
+
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/donations", require("./routes/donationRoutes"));
 app.use("/api/usage", require("./routes/usageRoutes"));
+
+// Global handler for all OPTIONS requests to ensure CORS headers are always set
+app.options("*", cors(corsOptions));
+
 app.use("/", (req, res)=> {
     res.send("Hello World");
 })
