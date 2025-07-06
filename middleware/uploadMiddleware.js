@@ -1,17 +1,6 @@
 const multer = require("multer");
-const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const filename =
-      file.fieldname + "-" + Date.now() + ext;
-    cb(null, filename);
-  },
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage,
@@ -19,10 +8,9 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png/;
     const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
+      require('path').extname(file.originalname).toLowerCase()
     );
     const mimetype = filetypes.test(file.mimetype);
-
     if (mimetype && extname) {
       return cb(null, true);
     }
