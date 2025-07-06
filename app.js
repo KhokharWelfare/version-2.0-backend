@@ -29,15 +29,7 @@ app.use(cors({
   }
 }));
 
-// Ensure CORS headers are always set for allowed origins (Vercel compatibility)
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-  next();
-});
+
 
 // Explicitly handle preflight requests for all routes
 app.options('*', cors({
