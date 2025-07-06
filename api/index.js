@@ -1,9 +1,10 @@
-const app = require("../app");
+// api/index.js
 
-const PORT = process.env.PORT || 5000;
+const app = require("../app"); // your main express app
 
-// app.listen(PORT, ()=>{
-//     console.log("Server running: www.localhost:5000");
-// })
-
-module.exports = app;
+// Vercel expects a default export of a function that handles requests
+module.exports = async (req, res) => {
+  // This ensures Express routes are only attached once
+  const handleRequest = app;
+  return handleRequest(req, res);
+};

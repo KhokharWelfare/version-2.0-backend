@@ -12,5 +12,10 @@
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
     "path": "^0.12.7"
+  },
+  "scripts": {
+    "dev": "node --experimental-specifier-resolution=node",
+    "build": "next build",
+    "start": "next start"
   }
 }
