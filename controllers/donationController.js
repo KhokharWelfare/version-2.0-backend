@@ -2,19 +2,22 @@ const Donation = require("../models/Donation");
 
 exports.createDonation = async (req, res) => {
   const { amount } = req.body;
-  const proof = req.file ? `/uploads/${req.file.filename}` : null;
+  const proof = req.cloudinaryUrl || null;
 
   if (!amount || !proof) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const donation = await Donation.create({
-    amount,
-    proof,
-    user: req.user._id,
-  });
-
-  res.status(201).json({ status: "success", data: { donation } });
+  try {
+    const donation = await Donation.create({
+      amount,
+      proof,
+      user: req.user._id,
+    });
+    res.status(201).json({ status: "success", data: { donation } });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to create donation", error: err.message });
+  }
 };
 
 exports.getMyDonations = async (req, res) => {
