@@ -17,21 +17,6 @@ const allowedOrigins = [
   "https://www.khokharwelfarefoundaion.com"
 ];
 // Custom CORS middleware for Vercel compatibility
-// app.use((req, res, next) => {
-//   const origin = req.headers.origin;
-//   if (allowedOrigins.includes(origin)) {
-//     res.setHeader('Access-Control-Allow-Origin', origin);
-//     res.setHeader('Access-Control-Allow-Credentials', 'true');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie');
-//   }
-//   if (req.method === 'OPTIONS') {
-//     res.status(200).end();
-//     return;
-//   }
-//   next();
-// });
-
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
@@ -46,6 +31,21 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//     res.setHeader('Access-Control-Allow-Origin', origin);
+//     res.setHeader('Access-Control-Allow-Credentials', 'true');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Set-Cookie');
+//   }
+//   if (req.method === 'OPTIONS') {
+//     res.status(200).end();
+//     return;
+//   }
+//   next();
+// });
 
 // Connect to DB
 connectDB();
