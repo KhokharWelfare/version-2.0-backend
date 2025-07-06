@@ -8,7 +8,7 @@ const cloudinaryUpload = (req, res, next) => {
   const stream = cloudinary.uploader.upload_stream(
     { folder: 'donations' },
     (error, result) => {
-      if (error) return res.status(500).json({ message: 'Cloudinary upload failed', error: error.message });
+      if (error) return next(error);
       req.cloudinaryUrl = result.secure_url;
       next();
     }
